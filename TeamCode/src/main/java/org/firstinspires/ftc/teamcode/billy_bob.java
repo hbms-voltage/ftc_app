@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
  * Created by Celia on 3/19/2018.
  */
 @TeleOp
-public class billy_bob_three_test extends LinearOpMode {
+public class billy_bob extends LinearOpMode {
     private DcMotor arm;
     private DcMotor left_wheel;
     private DcMotor right_wheel;
@@ -27,41 +27,33 @@ public class billy_bob_three_test extends LinearOpMode {
         right_claw = hardwareMap.get(Servo.class, "right_claw");
         touch = hardwareMap.get(TouchSensor.class, "touch");
 
-        double left_wheel_power;
-        double right_wheel_power;
-        double left_servo_position;
-        double right_servo_position;
-        double arm_position;
-        double arm_speed;
-        double drive_speed;
+        double left_wheel_power = 0;
+        double right_wheel_power = 0;
+        double arm_position = 0;
+        double arm_speed = 5;
+        double drive_speed = 1;
+
 
         waitForStart();
 
         while (opModeIsActive()) {
-            left_wheel_power = 0;
-            right_wheel_power = 0;
-            arm_position = 0;
-            left_servo_position = 0;
-            right_servo_position = 0;
 
             if (this.gamepad1.right_bumper){
                 drive_speed = 10;
-            } else {
-                drive_speed = 1;
-            }
-
-            if (this.gamepad2.right_bumper){
-                //makes arm slower
-                arm_speed = 10;
-            } else {
-                //makes arm normal speed
-                arm_speed = 5;
             }
 
             left_wheel.setPower(-this.gamepad1.left_stick_y / drive_speed);
             right_wheel.setPower(this.gamepad1.right_stick_y / drive_speed);
 
-            if (this.gamepad2.x){
+            // makes arm motor slower
+            if (this.gamepad2.right_bumper) {
+                arm_speed = 10;
+            }
+
+            arm.setPower(-this.gamepad2.left_stick_y / arm_speed);
+
+
+            if (this.gamepad2.x) {
                 left_claw.setPosition(180);
                 right_claw.setPosition(0);
             } else {
@@ -69,15 +61,16 @@ public class billy_bob_three_test extends LinearOpMode {
                 right_claw.setPosition(180);
             }
 
-            if (touch.isPressed()) {
-                if (-this.gamepad2.left_stick_y < 0) {
-                    arm.setPower(0);
-                } else {
-                    arm.setPower(-this.gamepad2.left_stick_y / arm_speed);
-                }
-            } else {
-                arm.setPower(-this.gamepad2.left_stick_y / arm_speed);
-            }
+//            if (touch.isPressed()) {
+//                if (-this.gamepad2.left_stick_y < 0) {
+//                    arm.setPower(0);
+//                } else {
+//                    arm.setPower(-this.gamepad2.left_stick_y / arm_speed);
+//                }
+//            } else {
+//                arm.setPower(-this.gamepad2.left_stick_y / arm_speed);
+//
+//            }
 
         }
     }
